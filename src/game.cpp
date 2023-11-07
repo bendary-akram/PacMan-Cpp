@@ -3,7 +3,7 @@
 #include <iostream>
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height), engine(dev()),
+    : pacman(grid_width, grid_height), engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)), random_sign(0, 1),
       random_axis(0, 1) {
@@ -28,10 +28,10 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, snake);
+    controller.HandleInput(running, pacman);
     Update();
-    if (snake.alive)
-      renderer.Render(snake, food, obstacles);
+    if (pacman.alive)
+      renderer.Render(pacman, food, obstacles);
     else {
       renderer.GameOver(score);
     }
@@ -64,9 +64,9 @@ void Game::PlaceFood() {
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
-    // Check that the location is not occupied by a snake item before placing
+    // Check that the location is not occupied by a pacman item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if (!pacman.PacmanCell(x, y)) {
       food.x = x;
       food.y = y;
       return;
@@ -81,10 +81,10 @@ void Game::PlaceObstacle() {
       i = 0;
       x = random_w(engine);
       y = random_h(engine);
-      // Check that the location is not occupied by a snake item before
+      // Check that the location is not occupied by a pacman item before
       // placing obstacle.
       for (auto &obst : obst_num) {
-        if (!snake.SnakeCell(x, y)) {
+        if (!pacman.PacmanCell(x, y)) {
           obst.x = x;
           obst.y = y;
           i++;
@@ -115,24 +115,24 @@ void Game::PlaceObstacle() {
 }
 
 void Game::Update() {
-  if (!snake.alive)
+  if (!pacman.alive)
     return;
 
-  snake.Update();
+  pacman.Update();
 
-  int new_x = static_cast<int>(snake.head_x);
-  int new_y = static_cast<int>(snake.head_y);
+  int new_x = static_cast<int>(pacman.head_x);
+  int new_y = static_cast<int>(pacman.head_y);
 
-  // Check if the snake has died due to hitting obstcales.
+  // Check if the pacman has died due to hitting obstcales.
 
   for (auto const &obst_num : obstacles) {
     for (auto const &obst : obst_num) {
       if (new_x == obst.x && new_y == obst.y) {
-        snake.alive = false;
+        pacman.alive = false;
         break;
       }
     }
-    if (snake.alive == false)
+    if (pacman.alive == false)
       break;
   }
 
@@ -164,14 +164,14 @@ void Game::Update() {
     /* Place food and obstacle*/
     PlaceFood();
     PlaceObstacle();
-    // Grow snake and increase speed.
-    snake.GrowBody();
-    snake.speed += 0.02;
+    // Grow pacman and increase speed.
+    pacman.GrowBody();
+    pacman.speed += 0.02;
   }
 }
 
 int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }
+int Game::GetSize() const { return pacman.size; }
 
 void Game::IncrementObstSize() {
   obstacle_size++;

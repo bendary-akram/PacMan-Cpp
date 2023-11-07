@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
-#include "snake.h"
+#include "pacman.h"
 #include <random>
 
 class Game {
@@ -19,7 +19,7 @@ public:
   void IncrementObstSize();
 
 private:
-  Snake snake;
+  Pacman pacman;
   SDL_Point food;
   std::vector<std::vector<SDL_Point>> obstacles;
   int obstacle_size;   /*number of dots per one obstacle*/
