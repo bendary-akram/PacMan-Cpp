@@ -3,7 +3,9 @@
 
 #include "SDL.h"
 #include "SDL_ttf.h"
+#include "SDL_image.h"
 #include "pacman.h"
+#include "string"
 #include <vector>
 
 class Renderer {
@@ -17,6 +19,8 @@ public:
   void UpdateWindowTitle(int score, int fps);
   void GameOver(int score);
 
+  bool loadImage(std::string filename);
+
 private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
@@ -27,6 +31,7 @@ private:
   const std::size_t grid_height;
   TTF_Font *font;
   SDL_Surface *surfaceMessage;
+  SDL_Surface * image;
   SDL_Texture *Message;
 };
 

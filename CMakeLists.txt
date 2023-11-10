@@ -16,4 +16,4 @@ include_directories(${SDL2_INCLUDE_DIRS} src )
 
 add_executable(PacmanGame src/main.cpp src/game.cpp src/controller.cpp src/renderer.cpp src/pacman.cpp)
 string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
-target_link_libraries(PacmanGame ${SDL2_LIBRARIES} -lSDL2_ttf)
+target_link_libraries(PacmanGame ${SDL2_LIBRARIES} -lSDL2_ttf -lSDL2_image)

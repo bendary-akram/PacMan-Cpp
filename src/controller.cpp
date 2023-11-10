@@ -5,7 +5,8 @@
 
 void Controller::ChangeDirection(Pacman &pacman, Pacman::Direction input,
                                  Pacman::Direction opposite) const {
-  if (pacman.direction != opposite || pacman.size == 1) pacman.direction = input;
+  //if (pacman.direction != opposite || pacman.size == 1) 
+  pacman.direction = input;
   return;
 }
 
@@ -17,23 +18,30 @@ void Controller::HandleInput(bool &running, Pacman &pacman) const {
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
         case SDLK_UP:
-          ChangeDirection(pacman, Pacman::Direction::kUp,
-                          Pacman::Direction::kDown);
+              pacman.direction=Pacman::Direction::kUp;
+              pacman.angel=270;
+              pacman.flip=SDL_FLIP_VERTICAL;
           break;
 
         case SDLK_DOWN:
-          ChangeDirection(pacman, Pacman::Direction::kDown,
-                          Pacman::Direction::kUp);
+              pacman.direction=Pacman::Direction::kDown;
+              pacman.angel=90;
+              pacman.flip=SDL_FLIP_VERTICAL;
+
           break;
 
         case SDLK_LEFT:
-          ChangeDirection(pacman, Pacman::Direction::kLeft,
-                          Pacman::Direction::kRight);
+            pacman.direction=Pacman::Direction::kLeft;
+              pacman.angel=0;
+              pacman.flip=SDL_FLIP_HORIZONTAL;
+
           break;
 
         case SDLK_RIGHT:
-          ChangeDirection(pacman, Pacman::Direction::kRight,
-                          Pacman::Direction::kLeft);
+          pacman.direction=Pacman::Direction::kRight;
+              pacman.angel=0;
+              pacman.flip=SDL_FLIP_NONE;
+
           break;
       }
     }

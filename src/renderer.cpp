@@ -2,6 +2,24 @@
 #include <iostream>
 #include <string>
 
+bool Renderer::loadImage(std::string filename){
+
+  if (IMG_Init(IMG_INIT_PNG) < 0) {
+    std::cerr << "SDL could not initialize.\n";
+    std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
+  }
+    if(image !=NULL)
+    {
+      SDL_FreeSurface(image);
+    }
+    image = IMG_Load(filename.c_str());
+    if(image != NULL)
+      return(true);
+
+    std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
+    return(false);
+  
+}
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
                    const std::size_t grid_width, const std::size_t grid_height)
@@ -35,6 +53,7 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+  loadImage("../src/pacman.png");
 }
 
 Renderer::~Renderer() {
@@ -43,6 +62,7 @@ Renderer::~Renderer() {
   TTF_CloseFont(font);
   TTF_Quit();
   SDL_Quit();
+  IMG_Quit();
 }
 
 void Renderer::Render(Pacman const pacman, SDL_Point const &food,
@@ -71,22 +91,37 @@ void Renderer::Render(Pacman const pacman, SDL_Point const &food,
     }
   }
   // Render pacman's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+  /*SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   for (SDL_Point const &point : pacman.body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
     SDL_RenderFillRect(sdl_renderer, &block);
-  }
+  }*/
 
   // Render pacman's head
-  block.x = static_cast<int>(pacman.head_x) * block.w;
-  block.y = static_cast<int>(pacman.head_y) * block.h;
+  /*block.x = static_cast<int>(pacman.head_x) * block.w;
+  //block.y = static_cast<int>(pacman.head_y) * block.h;
   if (pacman.alive) {
     SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
   } else {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   }
-  SDL_RenderFillRect(sdl_renderer, &block);
+  //SDL_RenderFillRect(sdl_renderer, &block);*/
+
+///////////////////
+  Message = SDL_CreateTextureFromSurface(sdl_renderer, image);
+
+  SDL_Rect Message_rect;              // create a rect
+  Message_rect.x = pacman.head_x * grid_width;               // controls the rect's x coordinate
+  Message_rect.y = pacman.head_y * grid_height;               // controls the rect's y coordinte
+  Message_rect.w = grid_width; //image->w; // controls the width of the rect
+  Message_rect.h = grid_height; //->h; // controls the height of the rect
+//SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL;
+  SDL_RenderCopyEx(sdl_renderer, Message, NULL, &Message_rect,pacman.angel,NULL,pacman.flip);
+
+  //SDL_FreeSurface(image);
+  SDL_DestroyTexture(Message);
+  //////////////////
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);

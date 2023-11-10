@@ -24,6 +24,8 @@ public:
   bool alive{true};
   float head_x;
   float head_y;
+  int angel=0;
+  SDL_RendererFlip flip;
   std::vector<SDL_Point> body;
 
 private:
