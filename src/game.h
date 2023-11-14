@@ -37,6 +37,7 @@ private:
   void PlaceFood();
   void PlaceObstacle();
   void Update();
+  void LoadContent();
 };
 
 #endif

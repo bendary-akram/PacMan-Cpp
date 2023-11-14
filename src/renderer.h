@@ -19,7 +19,7 @@ public:
   void UpdateWindowTitle(int score, int fps);
   void GameOver(int score);
 
-  bool loadImage(std::string filename);
+  bool loadImage(SDL_Texture *&image,std::string filename,SDL_Rect &rect);
 
 private:
   SDL_Window *sdl_window;
@@ -31,8 +31,14 @@ private:
   const std::size_t grid_height;
   TTF_Font *font;
   SDL_Surface *surfaceMessage;
-  SDL_Surface * image;
   SDL_Texture *Message;
+
+  SDL_Texture * pacmanImage;
+  SDL_Rect rectPacmanImage;
+
+ SDL_Texture * layoutImage;
+ SDL_Rect rectLayoutImage;
+
 };
 
 #endif
